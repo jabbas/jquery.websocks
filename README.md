@@ -73,7 +73,7 @@ Event callbacks
 
 ```onopen```, ```onmessage```, ```onerror```, ```onclose```
 
-All of those functions works exactly like original JavaScript WebSocket, with small exception; they add another argument at the end which will contain decoded/deserialized value of data.
+All of those functions work exactly like original JavaScript WebSocket, with small exception; they add another argument at the end which will contain decoded/deserialized value of data.
 
 E.g.:
 
