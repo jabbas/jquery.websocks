@@ -8,14 +8,14 @@ Thin wrapper (and drop-in replacement) for JavaScript WebSocket.
 Requirements
 ------------
 
-[jQuery](http://jquery.com/) (tested on v2.0.3 but should work without glitches on older too)
+[jQuery](http://jquery.com/) (tested on v2.0.3 but should work without glitches on older versions too)
 
 Features
 --------
 
 Same as original JavaScript WebSocket and additionally:
 
-* keep alive
+* keepalive
 * automatic serialization and deserialization
 * automatic disconnection (when closing window)
 
@@ -35,8 +35,6 @@ It returns (almost) plain, native JavaScript WebSocket object.
 
 Options
 -------
-
-### Synopsis
 
 These are the default values
 
@@ -91,6 +89,12 @@ Additional function(s)
 ----------------------
 
 ```.esend(data)``` - acts exactly the same way as original ```.send(data)``` but uses serializer.encode prior to sending.
+
+E.g.:
+
+```
+websocks.esend("message in the bottle"); // Encodes and sends message to the web socket server
+```
 
 TODO
 ----
