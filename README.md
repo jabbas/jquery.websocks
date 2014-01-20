@@ -66,7 +66,7 @@ options = {
 - ```serializer``` - simple object with two functions:
   - ```encode``` - to encode the message prior to sending,
   - ```decode``` - to decode the message after getting it from the server,
-- ```onopen```, ```onmessage```, ```onerror```, ```onclose``` - callback functions which will be triggered when certain event will happen (same like in original WebSocket, with small - see below).
+- ```onopen```, ```onmessage```, ```onerror```, ```onclose``` - callback functions which will be triggered when certain event will happen (same like in original WebSocket, with small exception - see below).
 
 Event callbacks
 ---------------
