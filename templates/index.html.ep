@@ -1,0 +1,65 @@
+% title 'WebSocket test';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><%= title %></title>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
+    <script src="demo.js"></script>
+    <script src="jquery.websocks.js"></script>
+    <style typ="text/css">
+        body {
+            background: #CCC;
+        }
+        .wrapper {
+            font-family: monospace;
+            white-space: pre;
+            display: table;
+            width: 100%;
+        }
+
+        .console {
+            height: 100px;
+            border: 1px solid #DDD;
+            background-color: #EEE;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 100%;
+            display: table-row;
+        }
+        .console_prefix {
+            float: left;
+            color: #88F;
+            width: 6em;
+        }
+        .console_line {
+        }
+    </style>
+</head>
+<body>
+
+<h1><%= title %></h1>
+
+<h2>text/plain console</h2>
+<div class="console">
+    <div class="wrapper" id="console_plain">
+    </div>
+</div>
+
+<br />
+<h2>JSON Console</h2>
+<div class="console">
+    <div class="wrapper" id="console_json">
+    </div>
+</div>
+
+<h2>text/plain Console with JSON at backend</h2>
+<div class="console">
+    <div class="wrapper" id="console_plainjson">
+    </div>
+</div>
+</body>
+</html>

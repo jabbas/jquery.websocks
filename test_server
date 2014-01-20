@@ -1,0 +1,65 @@
+#!/usr/bin/env perl
+use warnings;
+use strict;
+
+use Mojolicious::Lite;
+use Mojo::IOLoop;
+use JSON::XS;
+
+my $json = JSON::XS->new->utf8;
+
+get '/' => 'index';
+
+websocket '/plain_demo' => sub {
+    my $self = shift;
+
+    $self->app->log->debug("WebSocket opened.");
+
+    $self->send('Welcome to the /plain_demo');
+    #Mojo::IOLoop->stream($self->tx->connection)->timeout(300);
+
+    $self->on(message => sub {
+        my ($self, $msg) = @_;
+        $self->app->log->debug("Received message: ".$msg);
+        $self->send("echo: $msg");
+    });
+
+    my $id = Mojo::IOLoop->recurring(30 => sub {
+        $self->app->log->debug("Sending periodical message");
+        $self->send(sprintf "Periodical message from server [timestamp: %d]", time());
+    });
+
+    $self->on(finish => sub {
+        my ($self, $code, $reason) = @_;
+        $self->app->log->debug("WebSocket closed with status $code.");
+        Mojo::IOLoop->remove($id);
+    });
+};
+
+websocket '/json_demo' => sub {
+    my $self = shift;
+
+    $self->app->log->debug("WebSocket opened.");
+
+    $self->send($json->encode({msg => 'Welcome to the /json_demo'}));
+    #Mojo::IOLoop->stream($self->tx->connection)->timeout(300);
+
+    $self->on(message => sub {
+        my ($self, $msg) = @_;
+        $self->app->log->debug("Received message: ".$msg);
+        $self->send($json->encode({msg => "echo: $msg"}));
+    });
+
+    my $id = Mojo::IOLoop->recurring(30 => sub {
+        $self->app->log->debug("Sending periodical message");
+        $self->send($json->encode({msg => sprintf "Periodical message from server [timestamp: %d]", time()}));
+    });
+
+    $self->on(finish => sub {
+        my ($self, $code, $reason) = @_;
+        $self->app->log->debug("WebSocket closed with status $code.");
+        Mojo::IOLoop->remove($id);
+    });
+};
+
+app->start;
