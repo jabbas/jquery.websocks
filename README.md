@@ -12,7 +12,7 @@ Because, in my humble opinion, the original JavaScript WebSocket API is horribly
 
 By searching the web, you can find that you should use WebSocket API like this:
 
-```
+```js
 var ws = new WebSocket('ws://some_url/to/websocket');
 ws.onmessage = function (event) { do_something_with(event) };
 ws.onclose = function (event) { do_something_with(event) };
@@ -121,7 +121,7 @@ Additional function(s)
 
 Example:
 
-```
+```js
 websocks.esend("message in the bottle"); // Encodes and sends message to the web socket server
 ```
 
