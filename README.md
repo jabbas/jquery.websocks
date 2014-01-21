@@ -24,7 +24,7 @@ Everything works, no one dies, we're fine.
 
 But...
 
-How we can be sure that we didn't missed some messages from the server?
+How we can be sure that we didn't miss some messages from the server?
 The WebSocket is connecting during the construction, and we are defining the ```.onmessage``` afterwards...
 What if we will encounter some "blocking" event between ```new WebSocket``` and setting ```.onmessage```? Or our JS thread in the browser will be stuck for some other reason?
 
