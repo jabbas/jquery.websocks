@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>jQuery.websocks by jabbas</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>jQuery.websocks</h1>
+          <h2>warm socks for JavaScript WebSocket</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/jabbas/jquery.websocks/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/jabbas/jquery.websocks/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/jabbas/jquery.websocks" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>
+<a name="jquerywebsocksjs-plugin" class="anchor" href="#jquerywebsocksjs-plugin"><span class="octicon octicon-link"></span></a>jquery.websocks.js plugin</h1>
+
+<p><a href="http://github.com">jquery.websocks.js</a> - warm socks for JavaScript WebSocket.</p>
+
+<p>Thin wrapper (and drop-in replacement) for JavaScript WebSocket.</p>
+
+<h2>
+<a name="why-another-websocket-wrapper" class="anchor" href="#why-another-websocket-wrapper"><span class="octicon octicon-link"></span></a>Why another WebSocket wrapper?</h2>
+
+<p>Because, in my humble opinion, the original JavaScript WebSocket API is horribly designed!</p>
+
+<p>By searching the web, you can find that you should use WebSocket API like this:</p>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="s1">'ws://some_url/to/websocket'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span> <span class="nx">do_something_with</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onclose</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span> <span class="nx">do_something_with</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">};</span>
+
+<span class="c1">// ... and so on with the rest of callbacks ...</span>
+</pre></div>
+
+<p>Everything works, no one dies, we're fine.</p>
+
+<p>But...</p>
+
+<p>How we can be sure that we didn't miss some messages from the server?
+The WebSocket is connecting during the construction, and we are defining the <code>.onmessage</code> afterwards...
+What if we will encounter some "blocking" event between <code>new WebSocket</code> and setting <code>.onmessage</code>? Or our JS thread in the browser will be stuck for some other reason?</p>
+
+<p>It should be done like in this plugin (by providing the callbacks during construction) or there should be <code>.connect()</code> function/method which should be called after setting the callbacks explicitly by the programmer.</p>
+
+<p>Anyway, besides the technical problems which may pop out, the original WebSocket API looks illogical for the technical guys (I'm assuming that the JS programmers are)...</p>
+
+<p>About the other WebSocket wrappers which i found on the web, most of them have hardcoded JSON/XML/base64 serialization. This approach allows you to define yours with additional benefits.</p>
+
+<h2>
+<a name="requirements" class="anchor" href="#requirements"><span class="octicon octicon-link"></span></a>Requirements</h2>
+
+<p><a href="http://jquery.com/">jQuery</a> (tested on v2.0.3 but should work without glitches on older versions too)</p>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<p>Same as original JavaScript WebSocket and additionally:</p>
+
+<ul>
+<li>keepalive</li>
+<li>automatic serialization and deserialization</li>
+<li>automatic disconnection (when closing window)</li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p>Just put it somewhere on your web server and load it into your web page.</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<div class="highlight highlight-js"><pre><span class="kd">var</span> <span class="nx">websocket</span> <span class="o">=</span> <span class="nx">$</span><span class="p">.</span><span class="nx">websocks</span><span class="p">(</span><span class="s2">"ws://your/websocket/socket"</span><span class="p">,</span> <span class="nx">options</span><span class="p">);</span>
+</pre></div>
+
+<p>It returns (almost) plain, native JavaScript WebSocket object.</p>
+
+<h2>
+<a name="options" class="anchor" href="#options"><span class="octicon octicon-link"></span></a>Options</h2>
+
+<p>These are the default values</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">options</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">protocols</span><span class="o">:</span> <span class="p">[],</span>
+
+    <span class="nx">keepAlive</span><span class="o">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="nx">keepAliveInterval</span><span class="o">:</span> <span class="mi">10000</span><span class="p">,</span>
+    <span class="nx">keepAliveMessage</span><span class="o">:</span> <span class="s1">'_KEEP_ALIVE_'</span><span class="p">,</span>
+
+    <span class="nx">serializer</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">encode</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{},</span>
+        <span class="nx">decode</span><span class="o">:</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{},</span>
+    <span class="p">},</span>
+
+    <span class="nx">onopen</span><span class="o">:</span>     <span class="kd">function</span><span class="p">()</span> <span class="p">{},</span>
+    <span class="nx">onmessage</span><span class="o">:</span>  <span class="kd">function</span><span class="p">()</span> <span class="p">{},</span>
+    <span class="nx">onerror</span><span class="o">:</span>    <span class="kd">function</span><span class="p">()</span> <span class="p">{},</span>
+    <span class="nx">onclose</span><span class="o">:</span>    <span class="kd">function</span><span class="p">()</span> <span class="p">{},</span>
+
+<span class="p">};</span>
+</pre></div>
+
+<ul>
+<li>
+<code>protocols</code> - same as second parameter of original WebSocket (default: None),</li>
+<li>
+<code>keepAlive</code> - if true turns on the "Poor's man keep alive",</li>
+<li>
+<code>keepAliveInterval</code> - how often send keep alive packet to the server in milliseconds (default: 10000),</li>
+<li>
+<code>KeepAliveMessage</code> - the contents of the message which will be sent to server (default: <em>KEEP</em>ALIVE_),</li>
+<li>
+<code>serializer</code> - simple object with two functions:
+
+<ul>
+<li>
+<code>encode</code> - to encode the message prior to sending,</li>
+<li>
+<code>decode</code> - to decode the message after getting it from the server,</li>
+</ul>
+</li>
+<li>
+<code>onopen</code>, <code>onmessage</code>, <code>onerror</code>, <code>onclose</code> - callback functions which will be triggered when certain event will happen (same like in original WebSocket, with small exception - see below).</li>
+</ul><h2>
+<a name="event-callbacks" class="anchor" href="#event-callbacks"><span class="octicon octicon-link"></span></a>Event callbacks</h2>
+
+<p><code>onopen</code>, <code>onmessage</code>, <code>onerror</code>, <code>onclose</code></p>
+
+<p>All of those functions work exactly like original JavaScript WebSocket, with small exception; they add another argument at the end which will contain decoded/deserialized data.</p>
+
+<p>Example:</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">on</span> <span class="nx">message</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">,</span> <span class="nx">decoded_data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Event"</span> <span class="o">+</span> <span class="nx">e</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Original data is: "</span> <span class="o">+</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"Decoded data "</span> <span class="o">+</span> <span class="nx">decoded_data</span><span class="p">);</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>
+<a name="additional-functions" class="anchor" href="#additional-functions"><span class="octicon octicon-link"></span></a>Additional function(s)</h2>
+
+<p><code>.esend(data)</code> - acts exactly the same way as original <code>.send(data)</code> but uses serializer.encode prior to sending.</p>
+
+<p>Example:</p>
+
+<div class="highlight highlight-js"><pre><span class="nx">websocks</span><span class="p">.</span><span class="nx">esend</span><span class="p">(</span><span class="s2">"message in the bottle"</span><span class="p">);</span> <span class="c1">// Encodes and sends message to the web socket server</span>
+</pre></div>
+
+<h2>
+<a name="todo" class="anchor" href="#todo"><span class="octicon octicon-link"></span></a>TODO</h2>
+
+<ul>
+<li>automagic reconnect,</li>
+<li>plain js Object instead of jQuery wrapper/plugin</li>
+</ul>
+        </section>
+
+        <footer>
+          jQuery.websocks is maintained by <a href="https://github.com/jabbas">jabbas</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+        
+      </div>
+    </div>
+  </body>
+</html>
